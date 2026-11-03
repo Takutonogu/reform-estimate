@@ -12,20 +12,57 @@ document.body.style.backgroundColor = `aliceblue`;
 
 let area = prompt("面積（㎡）を入力してください", 20);
 area = Number(area);
+let buildingAge = prompt('築年数（年）を入力してください', 35)
+buildingAge = Number(buildingAge);
+let budget = prompt('予算（円）を入力してください', 250000);
+budget = Number(budget);
+
+//築年数と予算の入力欄作成
+
+let repairCost;
+let ageMessage;
+if (buildingAge >= 30) {
+  repairCost = 100000
+  ageMessage = `築年数：${buildingAge}年（築30年以上のため補修費を加算）`;
+}
+else if (buildingAge >= 20) {
+  repairCost = 50000
+  ageMessage = `築年数：${buildingAge}年（築20年以上のため補修費を加算）`;
+}
+else {
+  repairCost = 0
+  ageMessage = `築年数：${buildingAge}年（補修費の加算なし）`;
+};
+//築年数による補修費の場合分け
 
 const constructionCost = area * price;
 //工事費＝面積*単価
 
-const overheadcost = constructionCost * overheadrate / 100;
-//諸経費＝工事費×諸経費率÷100
+const subtotal = constructionCost + repairCost;
+//小計＝工事費+補修費
 
-const subtotal = constructionCost;
-//小計＝工事費（STEP2のみ）
+const overheadcost = subtotal * overheadrate / 100;
+//諸経費＝小計×諸経費率÷100
 
 const total = subtotal + overheadcost;
 //合計＝小計+諸経費
 
 console.log(`===== リフォーム費用 簡易見積もり（学習用） =====`);
 console.log(`工事費：${constructionCost}円（${area}㎡ × ${price}円）`);
+console.log(ageMessage);
+console.log(`補修費：${repairCost}円`);
+console.log(`小計：${subtotal}円`);
 console.log(`諸経費（${overheadrate}%）：${overheadcost}円`);
 console.log(`合計：${total}円`);
+
+if (total > budget) {
+  document.title = `【学習用】リフォーム見積もり：予算超過`;
+  document.body.style.backgroundColor = `mistyrose`;
+  console.log(`予算：${budget}円 → 予算を超えています（超過${total - budget}円）`);
+}
+else {
+  document.title = `【学習用】リフォーム見積もり：予算内`;
+  document.body.style.backgroundColor = `honeydew`;
+  console.log(`予算：${budget}円 → 予算内です（残り${budget - total}円）`);
+};
+//合計額が予算超過した場合のタブ名と背景の変更
